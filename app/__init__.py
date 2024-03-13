@@ -22,8 +22,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-def load_user(user_id):
-    from models import UserProfile
-    return UserProfile.query.get(int(user_id))
+
+
 
 from app import views
