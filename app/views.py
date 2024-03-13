@@ -96,7 +96,7 @@ def get_uploaded_images():
     
     for subdir, dirs, files in os.walk(rootdir + '/uploads'):
         for file in files:
-            if file.endswith(('jpg', 'jpeg', 'png',)):
+            if file.endswith(('jpg', 'png',)):
                 images.append(file)
     return images
 
@@ -111,9 +111,9 @@ def files():
     return render_template("files.html", images=images)
 
 
-#@app.route('/logout')
-#@login_required
-#def logout():
+@app.route('/logout')
+@login_required
+def logout():
     logout_user()
     flash('You have been logged out.', 'success')
     return redirect(url_for('home'))
