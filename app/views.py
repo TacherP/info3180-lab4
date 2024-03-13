@@ -34,14 +34,15 @@ def upload():
         if form.validate_on_submit():
         # Get file data and save to your uploads folder
             photo = form.photofile.data
-            description = form.photofile.data
+            
 
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(
             app.config['UPLOAD_FOLDER'], filename
             ))
+            
             flash('File Saved', 'success')
-            return redirect(url_for('home'), filename=filename, description=description) # Update this to redirect the user to a route that displays all uploaded image files
+            return redirect(url_for('files')) # Update this to redirect the user to a route that displays all uploaded image files
         
         flash_errors(form)
     return render_template('upload.html', myform=form)
@@ -54,37 +55,34 @@ def login():
     # change this to actually validate the entire form submission
     # and not just one field
     if request.method ==  'POST':
+        
         if form.validate_on_submit():
-            if form.username.data:
-                # Get the username and password values from the form.
-                username = form.username.data
-                password = form.password.data
+            
+            # Get the username and password values from the form.
+            username = form.username.data
+            password = form.password.data
 
-                # Using your model, query database for a user based on the username
-                # and password submitted. Remember you need to compare the password hash.
-                # You will need to import the appropriate function to do so.
-                # Then store the result of that query to a `user` variable so it can be
-                # passed to the login_user() method below.'
+            # Using your model, query database for a user based on the username
+            # and password submitted. Remember you need to compare the password hash.
+            # You will need to import the appropriate function to do so.
+            # Then store the result of that query to a `user` variable so it can be
+            # passed to the login_user() method below.'
 
-                user=  db.session.execute(db.select(UserProfile).filter_by(username = username)).scalar()
+            user=  db.session.execute(db.select(UserProfile).filter_by(username = username)).scalar()
 
-                if user is not None and check_password_hash(user.password, password):
-                    remember_me = False
+            if user is not None and check_password_hash(user.password, password):
+                remember_me = False
 
                 if 'remember_me' in request.form:
                     remember_me = True
 
-                flash('Logged in successfully.', 'success')
-
-
-
-                # Gets user id, load into session
+                 # Gets user id, load into session
                 login_user(user, remember=remember_me)
 
                 # Remember to flash a message to the user
                 flash('logged in successfully.', 'success')
                 
-                
+               
                 return redirect(url_for("upload"))  # The user should be redirected to the upload form instead
             else: 
                 flash('Username or Password is incorrect.', 'danger')
